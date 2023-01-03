@@ -1,11 +1,12 @@
 import Head from 'next/head'
 import Layout from '../components/layout'
+import { TransactionContextProvider } from '../context/TransactionContext'
 import '../styles/global.css'
 import '../styles/tailwind.css'
 
 function App({ Component, pageProps }: any) {
   return (
-    <>
+    <TransactionContextProvider>
       <Head>
         <title>
           Send Crypto
@@ -15,8 +16,7 @@ function App({ Component, pageProps }: any) {
       <Layout>
         <Component {...pageProps} />
       </Layout>
-
-    </>
+    </TransactionContextProvider>
   )
 }
 
