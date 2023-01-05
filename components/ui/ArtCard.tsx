@@ -30,8 +30,8 @@ function ArtCard({
             src={img}
             alt={img}
             className="duration-300 rounded-lg group-hover:scale-110"
-          />
-        </div>
+/>
+</div>
 
         <div className="flex flex-wrap justify-between">
           <div className="space-y-2">
