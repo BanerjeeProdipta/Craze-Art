@@ -1,17 +1,63 @@
 import Link from 'next/link'
-import { useRef, useState } from 'react'
-import { AiOutlineClose, AiOutlineMenu, AiOutlineSearch } from 'react-icons/ai'
+import {
+  useContext,
+  useRef, useState,
+} from 'react'
+import {
+  AiOutlineClose, AiOutlineMenu, AiOutlineSearch, AiOutlineSend,
+} from 'react-icons/ai'
+import { TransactionContext } from '../../context/TransactionContext'
 
 function Navbar() {
   const ref = useRef<HTMLDivElement>(null)
   const [isOpen, setIsOpen] = useState(false)
 
+  const navItems = [
+    {
+      name: 'Collections',
+      href: '#collections',
+    },
+    {
+      name: 'Feature',
+      href: '#featured-arts',
+    },
+    {
+      name: 'FAQ',
+      href: '#faq',
+    },
+  ]
+
   const handleLinkOnClick = () => setIsOpen(false)
+
+  const { connectWallet, currentAccount, disconnectWallet } = useContext(TransactionContext)
+
+  console.log(currentAccount)
+
+  const connectWalletButton = () => (
+    <div>
+      {currentAccount ? (
+        <button
+          type="button"
+          className="p-1 text-white transition duration-500 ease-in-out border border-transparent border-white rounded cursor-pointer"
+          onClick={disconnectWallet}
+        >
+          {`${currentAccount.slice(0, 2)}...${currentAccount.slice(-4)}`}
+        </button>
+      ) : (
+        <button
+          type="button"
+          className="px-4 py-1 font-medium text-white transition duration-1000 rounded lg:px-4 hover:text-primaryLight"
+          onClick={connectWallet}
+        >
+          Connect Wallet
+        </button>
+      )}
+    </div>
+  )
 
   return (
     <nav
-      style={{ backdropFilter: 'blur(2px)' }}
-      className="sticky top-0 z-50 w-full p-4"
+      className="sticky top-0 z-50 w-full py-3 backdrop-blur-sm"
     >
       <div
         ref={ref}
@@ -28,13 +74,13 @@ function Navbar() {
             </Link>
           </div>
 
-          <button type="button" className="relative hidden mx-8 md:block">
+          <button type="button" className="relative flex-1 hidden mx-8 md:flex">
             <div className="absolute top-2.5 left-3">
               <AiOutlineSearch size={22} />
             </div>
             <input
               type="text"
-              className="flex p-2 pl-10 text-xl text-white rounded-md flex-0 md:w-4 xl:w-full focus:outline-none focus:ring-2 focus:border-transparent ring-primaryLight bg-white/10"
+              className="flex flex-1 p-2 pl-10 text-xl text-white rounded-md flex-0 md:w-4 xl:w-full focus:outline-none focus:ring-2 focus:border-transparent ring-primaryLight bg-white/10"
               placeholder="Search items and collections"
             />
           </button>
@@ -43,30 +89,26 @@ function Navbar() {
           <div className="justify-end hidden md:flex md:items-center md:text-lg lg:text-xl">
 
             <div className="flex space-x-4">
-              <a
-                href="#collections"
-                className="px-4 py-1 font-medium text-white transition duration-1000 rounded lg:px-4 hover:text-primaryLight"
-              >
-                Collections
-              </a>
-              <a
-                href="#featured-arts"
-                className="px-4 py-1 font-medium text-white transition duration-1000 rounded lg:px-4 hover:text-primaryLight"
-              >
-                Feature
-              </a>
-              <a
-                href="#faq"
-                className="px-4 py-1 font-medium text-white transition duration-1000 rounded lg:px-4 hover:text-primaryLight"
-              >
-                FAQ
-              </a>
-              <a
-                href="#select-wallet"
-                className="px-4 py-2 font-medium text-white transition duration-1000 rounded-md lg:px-4 whitespace-nowrap bg-gradient-to-bl from-primaryLight to-primaryDark hover:bg-gradient-to-tr"
-              >
-                Select Wallet
-              </a>
+              {
+              navItems.map((item) => (
+                <Link
+                  key={item.name}
+                  href={
+                  item.href
+                }
+                  className="px-4 py-1 font-medium text-white transition duration-1000 rounded lg:px-4 hover:text-primaryLight"
+                >
+                  {
+                  item.name
+                }
+                </Link>
+              ))
+
+}
+              {
+        connectWalletButton()
+              }
+
             </div>
           </div>
           {/* Medium screen links ENDS */}
@@ -92,10 +134,7 @@ function Navbar() {
        <div className="p-2 my-4 space-y-2 rounded-lg md:hidden bg-bgRight">
          <button
            type="button"
-           className="relative w-full p-1"
-           onClick={() => {
-             setIsOpen(false)
-           }}
+           className="relative w-full p-1 "
          >
            <div className="absolute top-3 left-3">
              <AiOutlineSearch size={22} />
@@ -103,38 +142,38 @@ function Navbar() {
            <input
              type="text"
              className="flex w-full p-2 pl-10 text-white rounded-md flex-0 focus:outline-none focus:ring-2 focus:border-transparent ring-primaryLight bg-white/10 w "
-             placeholder="Search items and collections"
+             placeholder="Search"
            />
-         </button>
-         <a
-           onClick={handleLinkOnClick}
-           href="#collections"
-           className="block p-2 font-semibold transition-all duration-300 rounded-md hover:text-white hover:bg-primaryLight hover:opacity-75"
-         >
-           Collections
-         </a>
-         <a
-           onClick={handleLinkOnClick}
-           href="#featured-arts"
-           className="block p-2 font-semibold transition-all duration-300 rounded-md hover:text-white hover:bg-primaryLight hover:opacity-75"
-         >
-           Feature
-         </a>
-         <a
-           onClick={handleLinkOnClick}
-           href="#faq"
-           className="block p-2 font-semibold transition-all duration-300 rounded-md hover:text-white hover:bg-primaryLight hover:opacity-75"
-         >
-           FAQ
-         </a>
-         <a
-           onClick={handleLinkOnClick}
-           href="#select-wallet"
-           className="block p-2 font-semibold transition-all duration-300 rounded-md hover:text-white hover:bg-primaryLight hover:opacity-75"
-         >
-           Select Wallet
-         </a>
 
+           <button
+             type="button"
+             className="absolute top-3.5 right-3"
+             onClick={() => setIsOpen(!isOpen)}
+           >
+             <AiOutlineSend />
+           </button>
+
+         </button>
+         {
+          navItems.map((item) => (
+            <Link
+              key={item.name}
+              onClick={handleLinkOnClick}
+              href={
+            item.href
+           }
+              className="block p-2 font-semibold transition-all duration-300 rounded-md hover:text-white hover:bg-primaryLight hover:opacity-75"
+            >
+              {
+            item.name
+         }
+            </Link>
+          ))
+         }
+
+         {
+      connectWalletButton()
+     }
        </div>
        )}
         {/* small screen links ENDS */}

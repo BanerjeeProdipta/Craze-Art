@@ -1,6 +1,8 @@
+import dynamic from 'next/dynamic'
 import { Suspense } from 'react'
-import Footer from '../landing/Footer'
 import Navbar from '../ui/Navbar'
+
+const LazyFooter = dynamic(() => import('../landing/Footer'), { ssr: false })
 
 function Layout({ children }) {
   return (
@@ -22,14 +24,13 @@ function Layout({ children }) {
         }}
       >
 
-        <div className="lg:container lg:mx-auto">
-          <div className="flex flex-col items-center justify-center">
-            <div className="w-full max-w-6xl">
+        <div className="lg:mx-auto">
+          <div className="flex flex-col items-center justify-center w-full">
+            <div className="w-full max-w-7xl">
               <Navbar />
               <div className="px-4">
                 {children}
-                <Footer />
-
+                <LazyFooter />
               </div>
             </div>
           </div>
