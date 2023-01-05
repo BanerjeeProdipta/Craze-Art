@@ -1,39 +1,34 @@
+/* eslint-disable object-curly-newline */
 /* eslint-disable max-len */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable consistent-return */
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable react/jsx-no-constructed-context-values */
 import { ethers } from 'ethers'
-import {
-  createContext,
-  useEffect,
-  useState,
-} from 'react'
+import { createContext, useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import { contractAddress, transactionABI } from '../../utils/constants'
 
 type NftType = {
-      addressTo: string,
-      amount: number,
-      message: string,
-      keyword: string,
-    }
+  addressTo: string
+  amount: number
+  message: string
+  keyword: string
+}
 
 const TransactionContext = createContext({
   transactionCount: 0,
-  connectWallet: () => { },
-  disconnectWallet: () => { },
+  connectWallet: () => {},
+  disconnectWallet: () => {},
   transactions: [],
   currentAccount: '',
   isLoading: false,
-  sendTransaction: (
-    data: NftType,
-  ) => {
+  sendTransaction: (data: NftType) => {
     console.log(data)
   },
 })
 
-const window:any = global
+const window: any = global
 const { ethereum } = window
 
 const createEthereumContract = () => {
@@ -44,7 +39,7 @@ const createEthereumContract = () => {
   return transactionsContract
 }
 
-function TransactionContextProvider({ children }:any) {
+function TransactionContextProvider({ children }: any) {
   const [currentAccount, setCurrentAccount] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [transactionCount, setTransactionCount] = useState(0)
@@ -57,13 +52,13 @@ function TransactionContextProvider({ children }:any) {
 
         const availableTransactions = await transactionsContract.getAllTransactions()
         console.log(availableTransactions)
-        const structuredTransactions = availableTransactions.map((transaction:any) => ({
+        const structuredTransactions = availableTransactions.map((transaction: any) => ({
           addressTo: transaction.receiver,
           addressFrom: transaction.sender,
           timestamp: new Date(transaction.timestamp.toNumber() * 1000).toLocaleString(),
           message: transaction.message,
           keyword: transaction.keyword,
-          amount: parseInt(transaction.amount._hex, 10) / (10 ** 18),
+          amount: parseInt(transaction.amount._hex, 10) / 10 ** 18,
         }))
 
         console.log(structuredTransactions)
@@ -115,29 +110,47 @@ function TransactionContextProvider({ children }:any) {
     }
   }
 
-  const sendTransaction = async (data:any) => {
+  const sendTransaction = async (data: any) => {
     try {
-      if (!ethereum) return alert('Please install MetaMask.')
+      if (!ethereum) {
+        toast.error('Install metamask!', {
+          position: 'top-right',
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'dark',
+        })
+        return
+      }
 
-      const {
-        addressTo, amount, message, keyword,
-      }: NftType = data
+      const { addressTo, amount, message, keyword }: NftType = data
+
       const transactionsContract = createEthereumContract()
       const parsedAmount = ethers.utils.parseEther(amount.toString())
 
       await ethereum.request({
         method: 'eth_sendTransaction',
-        params: [{
-          from: currentAccount,
-          to: addressTo,
-          gas: '0x5208',
-          value: parsedAmount._hex,
-        }],
+        params: [
+          {
+            from: currentAccount,
+            to: addressTo,
+            gas: '0x5208',
+            value: parsedAmount._hex,
+          },
+        ],
       })
 
       console.log(addressTo)
 
-      const transactionHash = await transactionsContract.addToBlockChain(addressTo, parsedAmount, message, keyword)
+      const transactionHash = await transactionsContract.addToBlockChain(
+        addressTo,
+        parsedAmount,
+        message,
+        keyword,
+      )
 
       setIsLoading(true)
       console.log(`Loading - ${transactionHash.hash}`)
