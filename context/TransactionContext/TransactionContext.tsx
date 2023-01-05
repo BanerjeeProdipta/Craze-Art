@@ -9,6 +9,7 @@ import {
   useEffect,
   useState,
 } from 'react'
+import { toast } from 'react-toastify'
 import { contractAddress, transactionABI } from '../../utils/constants'
 
 type NftType = {
@@ -78,7 +79,19 @@ function TransactionContextProvider({ children }:any) {
 
   const connectWallet = async () => {
     try {
-      if (!ethereum) return alert('Please install MetaMask.')
+      if (!ethereum) {
+        toast.error('Install metamask!', {
+          position: 'top-right',
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'dark',
+        })
+        return
+      }
 
       const accounts = await ethereum.request({ method: 'eth_requestAccounts' })
 
@@ -142,9 +155,11 @@ function TransactionContextProvider({ children }:any) {
     }
   }
 
-  const checkIfWalletIsConnect = async () => {
+  const isWalletIsConnected = async () => {
     try {
-      if (!ethereum) return alert('Please install MetaMask.')
+      if (!ethereum) {
+        return false
+      }
 
       const accounts = await ethereum.request({ method: 'eth_accounts' })
 
@@ -155,6 +170,7 @@ function TransactionContextProvider({ children }:any) {
       } else {
         console.log('No accounts found')
       }
+      return true
     } catch (error) {
       console.log(error)
     }
@@ -162,7 +178,7 @@ function TransactionContextProvider({ children }:any) {
 
   const checkIfTransactionsExists = async () => {
     try {
-      if (ethereum) {
+      if (ethereum && currentAccount) {
         const transactionsContract = createEthereumContract()
         const currentTransactionCount = await transactionsContract.getTransactionCount()
 
@@ -174,7 +190,7 @@ function TransactionContextProvider({ children }:any) {
   }
 
   useEffect(() => {
-    checkIfWalletIsConnect()
+    isWalletIsConnected()
     checkIfTransactionsExists()
   }, [transactionCount])
 
