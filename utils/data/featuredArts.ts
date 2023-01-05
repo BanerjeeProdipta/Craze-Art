@@ -2,21 +2,21 @@ import { ArtDataType } from '../types/artDataType'
 
 const featuredArts:ArtDataType[] = [
   {
-    img: 'image/collection/collection1.png',
+    img: 'collection1.png',
     author: 'Johny',
-    price: '0.005ETH',
+    price: 0.005,
     name: 'Yellow Painting',
   },
   {
-    img: 'image/collection/collection2.png',
+    img: 'collection2.png',
     author: 'Johny',
-    price: '0.005ETH',
+    price: 0.005,
     name: 'Yellow Painting',
   },
   {
-    img: 'image/collection/collection3.png',
+    img: 'collection3.png',
     author: 'Johny',
-    price: '0.005ETH',
+    price: 0.005,
     name: 'Yellow Painting',
   },
 ]

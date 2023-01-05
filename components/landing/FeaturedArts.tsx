@@ -16,7 +16,7 @@ function FeaturedArts() {
         {featuredArts.map((art) => (
           <ArtCard
             key={art.img}
-            img={art.img}
+            img={`image/collection/${art.img}`}
             author={art.author}
             price={art.price}
             name={art.name}

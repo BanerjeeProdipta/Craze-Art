@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable consistent-return */
 /* eslint-disable no-underscore-dangle */
@@ -10,6 +11,13 @@ import {
 } from 'react'
 import { contractAddress, transactionABI } from '../../utils/constants'
 
+type NftType = {
+      addressTo: string,
+      amount: number,
+      message: string,
+      keyword: string,
+    }
+
 const TransactionContext = createContext({
   transactionCount: 0,
   connectWallet: () => { },
@@ -18,12 +26,9 @@ const TransactionContext = createContext({
   currentAccount: '',
   isLoading: false,
   sendTransaction: (
-    addressTo:string,
-    amount:string,
-    message:string,
-    keyword:string,
+    data: NftType,
   ) => {
-    console.log(addressTo, amount, message, keyword)
+    console.log(data)
   },
 })
 
@@ -50,7 +55,7 @@ function TransactionContextProvider({ children }:any) {
         const transactionsContract = createEthereumContract()
 
         const availableTransactions = await transactionsContract.getAllTransactions()
-
+        console.log(availableTransactions)
         const structuredTransactions = availableTransactions.map((transaction:any) => ({
           addressTo: transaction.receiver,
           addressFrom: transaction.sender,
@@ -81,7 +86,6 @@ function TransactionContextProvider({ children }:any) {
       window.location.reload()
     } catch (error) {
       console.log(error)
-
     }
   }
 
@@ -97,45 +101,44 @@ function TransactionContextProvider({ children }:any) {
       console.log(error)
     }
   }
+
   const sendTransaction = async (data:any) => {
     try {
-      if (ethereum) {
-        const {
-          addressTo, amount, message, keyword,
-        } = data
-        const transactionsContract = createEthereumContract()
-        const parsedAmount = ethers.utils.parseEther(amount)
+      if (!ethereum) return alert('Please install MetaMask.')
 
-        await ethereum.request({
-          method: 'eth_sendTransaction',
-          params: [{
-            from: currentAccount,
-            to: addressTo,
-            gas: '0x5208',
-            // eslint-disable-next-line no-underscore-dangle
-            value: parsedAmount._hex,
-          }],
-        })
+      const {
+        addressTo, amount, message, keyword,
+      }: NftType = data
+      const transactionsContract = createEthereumContract()
+      const parsedAmount = ethers.utils.parseEther(amount.toString())
 
-        const transactionHash = await transactionsContract.addToBlockchain(addressTo, parsedAmount, message, keyword)
+      await ethereum.request({
+        method: 'eth_sendTransaction',
+        params: [{
+          from: currentAccount,
+          to: addressTo,
+          gas: '0x5208',
+          value: parsedAmount._hex,
+        }],
+      })
 
-        setIsLoading(true)
-        console.log(`Loading - ${transactionHash.hash}`)
-        await transactionHash.wait()
-        console.log(`Success - ${transactionHash.hash}`)
-        setIsLoading(false)
+      console.log(addressTo)
 
-        const transactionsCount = await transactionsContract.getTransactionCount()
+      const transactionHash = await transactionsContract.addToBlockChain(addressTo, parsedAmount, message, keyword)
 
-        setTransactionCount(transactionsCount.toNumber())
-        window.location.reload()
-      } else {
-        console.log('No ethereum object')
-      }
+      setIsLoading(true)
+      console.log(`Loading - ${transactionHash.hash}`)
+      await transactionHash.wait()
+      console.log(`Success - ${transactionHash.hash}`)
+      setIsLoading(false)
+
+      const transactionsCount = await transactionsContract.getTransactionCount()
+
+      setTransactionCount(transactionsCount.toNumber())
+      window.localStorage.setItem('transactionCount', transactionsCount.toNumber())
+      window.location.reload()
     } catch (error) {
       console.log(error)
-
-      throw new Error('No ethereum object')
     }
   }
 
@@ -173,7 +176,7 @@ function TransactionContextProvider({ children }:any) {
   useEffect(() => {
     checkIfWalletIsConnect()
     checkIfTransactionsExists()
-  }, [checkIfWalletIsConnect, transactionCount])
+  }, [transactionCount])
 
   return (
     <TransactionContext.Provider

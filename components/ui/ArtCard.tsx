@@ -26,7 +26,11 @@ function ArtCard({
     >
       <div className="p-4 space-y-4 transition rounded-lg shadow-lg bg-white/10 group-hover:bg-white/50">
         <div className="transition group-hover:scale-105">
-          <ImageContainer src={img} alt={img} className="object-scale-down w-full xs:object-fill" />
+          <ImageContainer
+            src={img}
+            alt={img}
+            className="object-scale-down w-full xs:object-fill"
+          />
         </div>
         <div className="flex flex-wrap justify-between">
           <div className="space-y-2">
@@ -42,16 +46,18 @@ function ArtCard({
             </p>
             <h4 className="text-xl font-semibold text-white">
               {price}
+              {' '}
+              ETH
             </h4>
           </div>
         </div>
         <PrimaryButton
           onClick={() => {
             const data = {
-              addressTo: '0x5FbDB2315678afecb367f032d93F642f64180aa3',
-              amount: '0.00001',
-              keyword: 'test',
-              message: 'test',
+              addressTo: '0x20F7b32Ee2E8BD9Ae802e9fa27350a7006F464F8',
+              amount: price,
+              keyword: img,
+              message: `Buy ${name} for ${price} ETH`,
 
             }
             sendTransaction(data)

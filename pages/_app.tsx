@@ -9,7 +9,7 @@ function App({ Component, pageProps }: any) {
     <TransactionContextProvider>
       <Head>
         <title>
-          Send Crypto
+          Craze Art
         </title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
