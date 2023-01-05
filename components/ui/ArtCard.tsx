@@ -1,4 +1,6 @@
 import { motion } from 'framer-motion'
+import { useContext } from 'react'
+import { TransactionContext } from '../../context/TransactionContext'
 import { item } from '../../utils/animation'
 import ImageContainer from './ImageContainer'
 import PrimaryButton from './PrimaryButton'
@@ -6,13 +8,15 @@ import PrimaryButton from './PrimaryButton'
 interface props{
   img:string;
   author:string;
-  price:string;
+  price:number;
   name:string;
 }
 
 function ArtCard({
   img, author, price, name,
 }:props) {
+  const { sendTransaction } = useContext(TransactionContext)
+
   return (
     <motion.li
       transition={{ duration: 0.2, ease: 'easeInOut' }}
@@ -22,7 +26,11 @@ function ArtCard({
     >
       <div className="p-4 space-y-4 transition rounded-lg shadow-lg bg-white/10 group-hover:bg-white/50">
         <div className="transition group-hover:scale-105">
-          <ImageContainer src={img} alt={img} className="object-scale-down w-full xs:object-fill" />
+          <ImageContainer
+            src={img}
+            alt={img}
+            className="object-scale-down w-full xs:object-fill"
+          />
         </div>
         <div className="flex flex-wrap justify-between">
           <div className="space-y-2">
@@ -38,11 +46,23 @@ function ArtCard({
             </p>
             <h4 className="text-xl font-semibold text-white">
               {price}
+              {' '}
+              ETH
             </h4>
           </div>
         </div>
         <PrimaryButton
-          text="Place a bid"
+          onClick={() => {
+            const data = {
+              addressTo: '0x20F7b32Ee2E8BD9Ae802e9fa27350a7006F464F8',
+              amount: price,
+              keyword: img,
+              message: `Buy ${name} for ${price} ETH`,
+
+            }
+            sendTransaction(data)
+          }}
+          text="Buy"
           className="w-full border border-transparent group-hover:border-primaryDark group-hover:bg-none group-hover:text-primaryDark"
         />
       </div>

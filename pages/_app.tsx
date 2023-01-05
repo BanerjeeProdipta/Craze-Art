@@ -3,6 +3,7 @@ import { useEffect } from 'react'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import Layout from '../components/layout'
+import { TransactionContextProvider } from '../context/TransactionContext'
 import '../styles/global.css'
 import '../styles/tailwind.css'
 
@@ -13,10 +14,10 @@ function App({ Component, pageProps }: any) {
   }, [])
 
   return (
-    <>
+    <TransactionContextProvider>
       <Head>
         <title>
-          Send Crypto
+          Craze Art
         </title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
@@ -24,8 +25,7 @@ function App({ Component, pageProps }: any) {
       <Layout>
         <Component {...pageProps} />
       </Layout>
-
-    </>
+    </TransactionContextProvider>
   )
 }
 
