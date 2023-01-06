@@ -71,7 +71,8 @@ function Footer() {
         </div>
       </div>
       <p className="py-24 text-xs font-thin text-center">
-        All Right Reserved by CrazeArt 2022 - {new Date().getFullYear()}
+        <span>All Right Reserved by CrazeArt 2022 -</span>
+        <span>{`${new Date().getFullYear()}`}</span>
       </p>
     </div>
   )

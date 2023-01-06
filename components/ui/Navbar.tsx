@@ -1,6 +1,5 @@
 import Link from 'next/link'
 import { useContext, useRef, useState } from 'react'
-
 import { AiOutlineClose, AiOutlineMenu, AiOutlineSearch, AiOutlineSend } from 'react-icons/ai'
 import { TransactionContext } from '../../context/TransactionContext'
 
@@ -52,7 +51,7 @@ function Navbar() {
   )
 
   return (
-    <nav className="sticky top-0 z-50 w-full py-3 backdrop-blur-sm">
+    <nav className="sticky top-0 z-50 w-full px-2 py-3 backdrop-blur-sm">
       <div
         ref={ref}
         className="relative overflow-hidden transition-all delay-150 duration-500 ease-in-out md:min-h-[80px]"

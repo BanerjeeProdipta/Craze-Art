@@ -33,12 +33,12 @@ function ArtCard({ img, author, price, name }: props) {
 
         <div className="flex flex-wrap justify-between">
           <div className="space-y-2">
-            <p>@{author}</p>
+            <p>{`@${author}`}</p>
             <h4 className="text-xl font-semibold">{name}</h4>
           </div>
           <div className="text-right not-prose">
             <p className="text-sm font-normal">Current Bid</p>
-            <h4 className="text-xl font-semibold text-white">{price} ETH</h4>
+            <h4 className="text-xl font-semibold text-white">{`${price} ETH`}</h4>
           </div>
         </div>
         <PrimaryButton
