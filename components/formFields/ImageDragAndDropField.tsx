@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useState } from 'react'
-import { AiFillCamera, AiOutlineCamera } from 'react-icons/ai'
+import { AiOutlineCamera } from 'react-icons/ai'
 
 const ImageDragAndDropField = React.forwardRef<
   HTMLInputElement,
