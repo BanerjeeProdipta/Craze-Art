@@ -29,7 +29,18 @@ type TransactionContextType = {
   getBalance: () => Promise<void>
 }
 
-const TransactionContext = createContext<TransactionContextType>({})
+const TransactionContext = createContext<TransactionContextType>({
+  currentAccount: '',
+  currentAccountBalance: '',
+  isLoading: false,
+  transactionCount: 0,
+  transactions: [],
+  connectWallet: async () => {},
+  disconnectWallet: async () => {},
+  sendTransaction: async () => {},
+  getAllTransactions: async () => {},
+  getBalance: async () => {},
+})
 
 const window: any = global
 const { ethereum } = window
