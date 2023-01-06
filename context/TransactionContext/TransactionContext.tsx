@@ -1,38 +1,48 @@
+/* eslint-disable object-curly-newline */
 /* eslint-disable max-len */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable consistent-return */
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable react/jsx-no-constructed-context-values */
 import { ethers } from 'ethers'
-import {
-  createContext,
-  useEffect,
-  useState,
-} from 'react'
+import { createContext, useEffect, useState } from 'react'
+import { toast } from 'react-toastify'
 import { contractAddress, transactionABI } from '../../utils/constants'
 
 type NftType = {
-      addressTo: string,
-      amount: number,
-      message: string,
-      keyword: string,
-    }
+  addressTo: string
+  amount: number
+  message: string
+  keyword: string
+}
 
-const TransactionContext = createContext({
-  transactionCount: 0,
-  connectWallet: () => { },
-  disconnectWallet: () => { },
-  transactions: [],
+type TransactionContextType = {
+  currentAccount: string
+  currentAccountBalance: string
+  isLoading: boolean
+  transactionCount: number
+  transactions: any[]
+  connectWallet: () => Promise<void>
+  disconnectWallet: () => Promise<void>
+  sendTransaction: (data: NftType) => Promise<void>
+  getAllTransactions: () => Promise<void>
+  getBalance: () => Promise<void>
+}
+
+const TransactionContext = createContext<TransactionContextType>({
   currentAccount: '',
+  currentAccountBalance: '',
   isLoading: false,
-  sendTransaction: (
-    data: NftType,
-  ) => {
-    console.log(data)
-  },
+  transactionCount: 0,
+  transactions: [],
+  connectWallet: async () => {},
+  disconnectWallet: async () => {},
+  sendTransaction: async () => {},
+  getAllTransactions: async () => {},
+  getBalance: async () => {},
 })
 
-const window:any = global
+const window: any = global
 const { ethereum } = window
 
 const createEthereumContract = () => {
@@ -43,8 +53,9 @@ const createEthereumContract = () => {
   return transactionsContract
 }
 
-function TransactionContextProvider({ children }:any) {
+function TransactionContextProvider({ children }: any) {
   const [currentAccount, setCurrentAccount] = useState('')
+  const [currentAccountBalance, setCurrentAccountBalance] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [transactionCount, setTransactionCount] = useState(0)
   const [transactions, setTransactions] = useState([])
@@ -56,13 +67,13 @@ function TransactionContextProvider({ children }:any) {
 
         const availableTransactions = await transactionsContract.getAllTransactions()
         console.log(availableTransactions)
-        const structuredTransactions = availableTransactions.map((transaction:any) => ({
+        const structuredTransactions = availableTransactions.map((transaction: any) => ({
           addressTo: transaction.receiver,
           addressFrom: transaction.sender,
           timestamp: new Date(transaction.timestamp.toNumber() * 1000).toLocaleString(),
           message: transaction.message,
           keyword: transaction.keyword,
-          amount: parseInt(transaction.amount._hex, 10) / (10 ** 18),
+          amount: parseInt(transaction.amount._hex, 10) / 10 ** 18,
         }))
 
         console.log(structuredTransactions)
@@ -78,7 +89,19 @@ function TransactionContextProvider({ children }:any) {
 
   const connectWallet = async () => {
     try {
-      if (!ethereum) return alert('Please install MetaMask.')
+      if (!ethereum) {
+        toast.error('Install metamask!', {
+          position: 'top-right',
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'dark',
+        })
+        return
+      }
 
       const accounts = await ethereum.request({ method: 'eth_requestAccounts' })
 
@@ -102,29 +125,47 @@ function TransactionContextProvider({ children }:any) {
     }
   }
 
-  const sendTransaction = async (data:any) => {
+  const sendTransaction = async (data: any) => {
     try {
-      if (!ethereum) return alert('Please install MetaMask.')
+      if (!ethereum) {
+        toast.error('Install metamask!', {
+          position: 'top-right',
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'dark',
+        })
+        return
+      }
 
-      const {
-        addressTo, amount, message, keyword,
-      }: NftType = data
+      const { addressTo, amount, message, keyword }: NftType = data
+
       const transactionsContract = createEthereumContract()
       const parsedAmount = ethers.utils.parseEther(amount.toString())
 
       await ethereum.request({
         method: 'eth_sendTransaction',
-        params: [{
-          from: currentAccount,
-          to: addressTo,
-          gas: '0x5208',
-          value: parsedAmount._hex,
-        }],
+        params: [
+          {
+            from: currentAccount,
+            to: addressTo,
+            gas: '0x5208',
+            value: parsedAmount._hex,
+          },
+        ],
       })
 
       console.log(addressTo)
 
-      const transactionHash = await transactionsContract.addToBlockChain(addressTo, parsedAmount, message, keyword)
+      const transactionHash = await transactionsContract.addToBlockChain(
+        addressTo,
+        parsedAmount,
+        message,
+        keyword,
+      )
 
       setIsLoading(true)
       console.log(`Loading - ${transactionHash.hash}`)
@@ -142,19 +183,23 @@ function TransactionContextProvider({ children }:any) {
     }
   }
 
-  const checkIfWalletIsConnect = async () => {
+  const isWalletIsConnected = async () => {
     try {
-      if (!ethereum) return alert('Please install MetaMask.')
+      if (!ethereum) {
+        return false
+      }
 
       const accounts = await ethereum.request({ method: 'eth_accounts' })
 
       if (accounts.length) {
         setCurrentAccount(accounts[0])
+        await getBalance()
 
         getAllTransactions()
       } else {
         console.log('No accounts found')
       }
+      return true
     } catch (error) {
       console.log(error)
     }
@@ -162,7 +207,7 @@ function TransactionContextProvider({ children }:any) {
 
   const checkIfTransactionsExists = async () => {
     try {
-      if (ethereum) {
+      if (ethereum && currentAccount) {
         const transactionsContract = createEthereumContract()
         const currentTransactionCount = await transactionsContract.getTransactionCount()
 
@@ -173,21 +218,41 @@ function TransactionContextProvider({ children }:any) {
     }
   }
 
+  const getBalance = async () => {
+    try {
+      if (ethereum && currentAccount) {
+        const provider = new ethers.providers.Web3Provider(ethereum)
+        const balance = await provider.getBalance(currentAccount)
+        const etherBalance = ethers.utils.formatEther(balance)
+
+        console.log('etherBalance', etherBalance)
+
+        setCurrentAccountBalance(etherBalance)
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   useEffect(() => {
-    checkIfWalletIsConnect()
+    isWalletIsConnected()
+    getBalance()
     checkIfTransactionsExists()
   }, [transactionCount])
 
   return (
     <TransactionContext.Provider
       value={{
-        transactionCount,
+        currentAccount,
+        currentAccountBalance,
         connectWallet,
         disconnectWallet,
-        transactions,
-        currentAccount,
-        isLoading,
         sendTransaction,
+        getAllTransactions,
+        getBalance,
+        isLoading,
+        transactions,
+        transactionCount,
       }}
     >
       {children}

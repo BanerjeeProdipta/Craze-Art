@@ -2,16 +2,16 @@ import Link from 'next/link'
 
 function Footer() {
   return (
-    <div className="mt-8 prose-p:text-sm prose-h4:font-bold prose-h4:text-xl prose-h4:text-white">
-      <div className="grid grid-cols-2 gap-6 lg:grid-cols-5">
+    <div className="mt-8 prose-h4:text-xl prose-h4:font-bold prose-h4:text-white prose-p:text-sm">
+      <div className="grid grid-cols-2 gap-6 xl:grid-cols-5">
         <div className="col-span-2">
           <h1 className="mb-2 text-xl font-bold text-white">
             Craze
             <span className="text-primaryLight">Art</span>
           </h1>
           <p className="max-w-xs">
-            The best NFT marketplace
-            website in the world and feel your experience in selling or buy our work
+            The best NFT marketplace website in the world and feel your experience in selling or buy
+            our work
           </p>
         </div>
         <div className="space-y-3">
@@ -48,21 +48,13 @@ function Footer() {
           <h4>Contact</h4>
           <p />
           <div>
-            <a
-              href="tel: +01234567895"
-            >
-              <p>
-                +012 3456789
-              </p>
+            <a href="tel: +8801303848453">
+              <p>+8801303848453</p>
             </a>
           </div>
           <div>
-            <a
-              href="mailto:saquib@universalmachine.io"
-            >
-              <p>
-                saquib@universalmachine.io
-              </p>
+            <a href="mailto:probanerjee17@gmail.com">
+              <p>probanerjee17@gmail.com</p>
             </a>
           </div>
           <div className="flex space-x-6">
@@ -78,8 +70,9 @@ function Footer() {
           </div>
         </div>
       </div>
-      <p className="py-24 text-center">
-        Tero Labs | All Right Reserved!
+      <p className="py-24 text-xs font-thin text-center">
+        <span>All Right Reserved by CrazeArt 2022 -</span>
+        <span>{`${new Date().getFullYear()}`}</span>
       </p>
     </div>
   )

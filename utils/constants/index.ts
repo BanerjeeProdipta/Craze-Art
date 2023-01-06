@@ -1,8 +1,9 @@
-import abi from '../abi/Transaction.json'
+import transactionAbi from '../abi/Transaction.json'
+import myNftAbi from '../abi/MyNFT.json'
 
-const transactionABI = abi.abi
-
+const transactionABI = transactionAbi.abi
+const myNFTABI = myNftAbi.abi
 // Replace with your contract address
-const contractAddress = '0x238B88004b7896e7dCA0e8d836a3D183B83B48dA'
+const contractAddress = '0x4129c98E53D1A454AdcEA5e282614d12b8b8F3bF'
 
-export { transactionABI, contractAddress }
+export { transactionABI, myNFTABI, contractAddress }

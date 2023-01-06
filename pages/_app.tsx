@@ -16,9 +16,7 @@ function App({ Component, pageProps }: any) {
   return (
     <TransactionContextProvider>
       <Head>
-        <title>
-          Craze Art
-        </title>
+        <title>Craze Art</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <ToastContainer />

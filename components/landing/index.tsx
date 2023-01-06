@@ -47,7 +47,6 @@ function Landing() {
       <MotionSectionReveal>
         <Footer />
       </MotionSectionReveal>
-
     </div>
   )
 }
