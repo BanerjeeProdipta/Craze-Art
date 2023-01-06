@@ -3,12 +3,12 @@ import { ReactNode, useEffect } from 'react'
 import { useInView } from 'react-intersection-observer'
 import { container } from '../../utils/animation'
 
-interface props{
-  children: ReactNode;
-  className: string;
+interface props {
+  children: ReactNode
+  className: string
 }
 
-function MotionContainer({ children, className }:props) {
+function MotionContainer({ children, className }: props) {
   const controls = useAnimation()
   const [ref, inView] = useInView()
 

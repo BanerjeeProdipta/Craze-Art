@@ -10,9 +10,7 @@ function FeaturedArts() {
         title="Featured Artworks"
         description="Lorem ipsum dolor sit amet, consectetur adipiscing elit."
       />
-      <MotionContainer
-        className="grid grid-cols-1 gap-4 lg:grid-cols-3"
-      >
+      <MotionContainer className="grid grid-cols-1 gap-4 lg:grid-cols-3">
         {featuredArts.map((art) => (
           <ArtCard
             key={art.img}

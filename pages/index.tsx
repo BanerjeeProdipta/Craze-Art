@@ -11,7 +11,8 @@ const LazyTopCreator = dynamic(() => import('../components/landing/TopCreator'),
 const LazyFAQ = dynamic(() => import('../components/landing/FAQ'), { ssr: false })
 const LazyCallToAction = dynamic(() => import('../components/landing/CallToAction'), { ssr: false })
 
-const LandingComponents = [LazyHome,
+const LandingComponents = [
+  LazyHome,
   LazySponsored,
   LazyAboutUs,
   LazyCollection,
@@ -29,7 +30,6 @@ function Landing() {
           <Component />
         </MotionSectionReveal>
       ))}
-
     </div>
   )
 }
