@@ -10,7 +10,6 @@
     "eslint-config-next": "^13.0.6",
     "ethers": "^5.7.2",
     "framer-motion": "^6.2.8",
-    "lint-staged": "^12.3.0",
     "next": "^13.0.6",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -24,10 +23,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
-    "lint": "eslint --ext .js,.jsx,.ts,.tsx components --color",
-    "lint:fix": "eslint --ext .js,.jsx,.ts,.tsx components --color --quiet --fix",
-    "lint:typecheck": "tsc --noEmit --skipLibCheck --project tsconfig.json"
+    "start": "next start"
   },
   "browserslist": {
     "production": [
@@ -43,30 +39,10 @@
   },
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.1",
-    "@typescript-eslint/eslint-plugin": "^5.14.0",
-    "@typescript-eslint/parser": "^5.14.0",
     "autoprefixer": "^10.4.2",
-    "babel-eslint": "^10.1.0",
-    "eslint": "^8.9.0",
-    "eslint-config-airbnb": "^19.0.4",
-    "eslint-config-node": "^4.1.0",
-    "eslint-config-prettier": "^8.3.0",
-    "eslint-plugin-import": "^2.25.4",
-    "eslint-plugin-jsx-a11y": "^6.5.1",
-    "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-prettier": "^4.0.0",
-    "eslint-plugin-react": "^7.29.4",
-    "eslint-plugin-react-hooks": "^4.3.0",
     "postcss": "^8.4.6",
     "prettier": "^2.5.1",
     "prettier-plugin-tailwindcss": "^0.1.5",
     "tailwindcss": "^3.0.18"
-  },
-  "lint-staged": {
-    "src/**/*.{js,jsx,ts,tsx}": [
-      "yarn lint",
-      "yarn prettier --write src",
-      "yarn test --watchAll=false --findRelatedTests --bail"
-    ]
   }
 }
