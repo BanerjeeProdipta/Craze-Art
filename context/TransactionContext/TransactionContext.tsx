@@ -243,14 +243,16 @@ function TransactionContextProvider({ children }: any) {
   return (
     <TransactionContext.Provider
       value={{
-        transactionCount,
+        currentAccount,
+        currentAccountBalance,
         connectWallet,
         disconnectWallet,
-        transactions,
-        currentAccount,
-        isLoading,
         sendTransaction,
-        currentAccountBalance,
+        getAllTransactions,
+        getBalance,
+        isLoading,
+        transactions,
+        transactionCount,
       }}
     >
       {children}
