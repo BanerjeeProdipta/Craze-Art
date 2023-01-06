@@ -53,38 +53,38 @@ function Home() {
         <div className="flex flex-col justify-center space-y-4">
           <ImageContainer
             src="/image/home/1.png"
-            className="object-scale-down transition duration-300 xs:object-fill hover:scale-105"
+            className="hover:brightness-125 rounded-xl filter"
             alt="art 1"
           />
           <ImageContainer
             src="/image/home/2.png"
-            className="object-scale-down transition duration-300 xs:object-fill hover:scale-105"
+            className="hover:brightness-125 rounded-xl filter"
             alt="art 2"
           />
           <ImageContainer
             src="/image/home/3.png"
-            className="object-scale-down transition duration-300 xs:object-fill hover:scale-105"
+            className="hover:brightness-125 rounded-xl filter"
             alt="art 3"
           />
         </div>
         <div className="flex flex-col justify-center space-y-4">
           <ImageContainer
             src="/image/home/4.png"
-            className="object-scale-down transition duration-300 xs:object-fill hover:scale-105"
+            className="hover:brightness-125 rounded-xl filter"
             alt="art 4"
           />
           <ImageContainer
             src="/image/home/5.png"
-            className="object-scale-down transition duration-300 xs:object-fill hover:scale-105"
+            className="hover:brightness-125 rounded-xl filter"
             alt="art 5"
           />
           <ImageContainer
             src="/image/home/6.png"
-            className="object-scale-down transition duration-300 xs:object-fill hover:scale-105"
+            className="hover:brightness-125 rounded-xl filter"
             alt="art 6"
           />
         </div>
-        <div className="flex flex-col justify-center"><ImageContainer src="/image/home/7.png" className="object-scale-down transition duration-300 xs:object-fill hover:scale-105" alt="art 7" /></div>
+        <div className="flex flex-col justify-center"><ImageContainer src="/image/home/7.png" className="hover:brightness-125 rounded-xl filter" alt="art 7" /></div>
       </div>
 
     </div>

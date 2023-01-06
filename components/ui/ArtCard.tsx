@@ -19,19 +19,20 @@ function ArtCard({
 
   return (
     <motion.li
-      transition={{ duration: 0.2, ease: 'easeInOut' }}
+      transition={{ duration: 0.1, ease: 'easeInOut' }}
       variants={item}
       className="transition duration-300 group"
       whileTap={{ scale: 0.90 }}
     >
-      <div className="p-4 space-y-4 transition rounded-lg shadow-lg bg-white/10 group-hover:bg-white/50">
-        <div className="transition group-hover:scale-105">
+      <div className="p-4 space-y-4 transition rounded-lg shadow-lg bg-white/10 group-hover:bg-black/10">
+        <div className="w-full overflow-hidden rounded-2xl">
           <ImageContainer
             src={img}
             alt={img}
-            className="object-scale-down w-full xs:object-fill"
-          />
-        </div>
+            className="duration-300 rounded-lg group-hover:scale-110"
+/>
+</div>
+
         <div className="flex flex-wrap justify-between">
           <div className="space-y-2">
             <p>

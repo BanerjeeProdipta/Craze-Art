@@ -3,7 +3,10 @@ import {
   useContext,
   useRef, useState,
 } from 'react'
-import { AiOutlineClose, AiOutlineMenu, AiOutlineSearch } from 'react-icons/ai'
+
+import {
+  AiOutlineClose, AiOutlineMenu, AiOutlineSearch, AiOutlineSend,
+} from 'react-icons/ai'
 import { TransactionContext } from '../../context/TransactionContext'
 
 function Navbar() {
@@ -55,8 +58,7 @@ function Navbar() {
 
   return (
     <nav
-      style={{ backdropFilter: 'blur(2px)' }}
-      className="sticky top-0 z-50 w-full p-4"
+      className="sticky top-0 z-50 w-full py-3 backdrop-blur-sm"
     >
       <div
         ref={ref}
@@ -73,13 +75,13 @@ function Navbar() {
             </Link>
           </div>
 
-          <button type="button" className="relative hidden mx-8 md:block">
+          <button type="button" className="relative flex-1 hidden mx-8 md:flex">
             <div className="absolute top-2.5 left-3">
               <AiOutlineSearch size={22} />
             </div>
             <input
               type="text"
-              className="flex p-2 pl-10 text-xl text-white rounded-md flex-0 md:w-4 xl:w-full focus:outline-none focus:ring-2 focus:border-transparent ring-primaryLight bg-white/10"
+              className="flex flex-1 p-2 pl-10 text-xl text-white rounded-md flex-0 md:w-4 xl:w-full focus:outline-none focus:ring-2 focus:border-transparent ring-primaryLight bg-white/10"
               placeholder="Search items and collections"
             />
           </button>
@@ -133,10 +135,7 @@ function Navbar() {
        <div className="p-2 my-4 space-y-2 rounded-lg md:hidden bg-bgRight">
          <button
            type="button"
-           className="relative w-full p-1"
-           onClick={() => {
-             setIsOpen(false)
-           }}
+           className="relative w-full p-1 "
          >
            <div className="absolute top-3 left-3">
              <AiOutlineSearch size={22} />
@@ -144,8 +143,17 @@ function Navbar() {
            <input
              type="text"
              className="flex w-full p-2 pl-10 text-white rounded-md flex-0 focus:outline-none focus:ring-2 focus:border-transparent ring-primaryLight bg-white/10 w "
-             placeholder="Search items and collections"
+             placeholder="Search"
            />
+
+           <button
+             type="button"
+             className="absolute top-3.5 right-3"
+             onClick={() => setIsOpen(!isOpen)}
+           >
+             <AiOutlineSend />
+           </button>
+
          </button>
          {
           navItems.map((item) => (
