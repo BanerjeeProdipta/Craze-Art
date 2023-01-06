@@ -16,16 +16,30 @@ type NftType = {
   keyword: string
 }
 
-const TransactionContext = createContext({
-  transactionCount: 0,
-  connectWallet: () => {},
-  disconnectWallet: () => {},
-  transactions: [],
+type TransactionContextType = {
+  currentAccount: string
+  currentAccountBalance: string
+  isLoading: boolean
+  transactionCount: number
+  transactions: any[]
+  connectWallet: () => Promise<void>
+  disconnectWallet: () => Promise<void>
+  sendTransaction: (data: NftType) => Promise<void>
+  getAllTransactions: () => Promise<void>
+  getBalance: () => Promise<void>
+}
+
+const TransactionContext = createContext<TransactionContextType>({
   currentAccount: '',
+  currentAccountBalance: '',
   isLoading: false,
-  sendTransaction: (data: NftType) => {
-    console.log(data)
-  },
+  transactionCount: 0,
+  transactions: [],
+  connectWallet: async () => {},
+  disconnectWallet: async () => {},
+  sendTransaction: async () => {},
+  getAllTransactions: async () => {},
+  getBalance: async () => {},
 })
 
 const window: any = global
@@ -41,6 +55,7 @@ const createEthereumContract = () => {
 
 function TransactionContextProvider({ children }: any) {
   const [currentAccount, setCurrentAccount] = useState('')
+  const [currentAccountBalance, setCurrentAccountBalance] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [transactionCount, setTransactionCount] = useState(0)
   const [transactions, setTransactions] = useState([])
@@ -178,6 +193,7 @@ function TransactionContextProvider({ children }: any) {
 
       if (accounts.length) {
         setCurrentAccount(accounts[0])
+        await getBalance()
 
         getAllTransactions()
       } else {
@@ -202,21 +218,41 @@ function TransactionContextProvider({ children }: any) {
     }
   }
 
+  const getBalance = async () => {
+    try {
+      if (ethereum && currentAccount) {
+        const provider = new ethers.providers.Web3Provider(ethereum)
+        const balance = await provider.getBalance(currentAccount)
+        const etherBalance = ethers.utils.formatEther(balance)
+
+        console.log('etherBalance', etherBalance)
+
+        setCurrentAccountBalance(etherBalance)
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   useEffect(() => {
     isWalletIsConnected()
+    getBalance()
     checkIfTransactionsExists()
   }, [transactionCount])
 
   return (
     <TransactionContext.Provider
       value={{
-        transactionCount,
+        currentAccount,
+        currentAccountBalance,
         connectWallet,
         disconnectWallet,
-        transactions,
-        currentAccount,
-        isLoading,
         sendTransaction,
+        getAllTransactions,
+        getBalance,
+        isLoading,
+        transactions,
+        transactionCount,
       }}
     >
       {children}
