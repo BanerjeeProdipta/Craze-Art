@@ -17,11 +17,11 @@ const squareVariants = {
   hidden: { opacity: 0, y: -100 },
 }
 
-interface props{
-  children: ReactNode;
+interface props {
+  children: ReactNode
 }
 
-function MotionSectionReveal({ children }:props) {
+function MotionSectionReveal({ children }: props) {
   const controls = useAnimation()
   const [ref, inView] = useInView()
 
@@ -32,12 +32,7 @@ function MotionSectionReveal({ children }:props) {
   }, [controls, inView])
 
   return (
-    <motion.div
-      ref={ref}
-      animate={controls}
-      initial="hidden"
-      variants={squareVariants}
-    >
+    <motion.div ref={ref} animate={controls} initial="hidden" variants={squareVariants}>
       {children}
     </motion.div>
   )

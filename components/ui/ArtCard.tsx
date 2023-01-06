@@ -5,16 +5,14 @@ import { item } from '../../utils/animation'
 import ImageContainer from './ImageContainer'
 import PrimaryButton from './PrimaryButton'
 
-interface props{
-  img:string;
-  author:string;
-  price:number;
-  name:string;
+interface props {
+  img: string
+  author: string
+  price: number
+  name: string
 }
 
-function ArtCard({
-  img, author, price, name,
-}:props) {
+function ArtCard({ img, author, price, name }: props) {
   const { sendTransaction } = useContext(TransactionContext)
 
   return (
@@ -22,7 +20,7 @@ function ArtCard({
       transition={{ duration: 0.1, ease: 'easeInOut' }}
       variants={item}
       className="transition duration-300 group"
-      whileTap={{ scale: 0.90 }}
+      whileTap={{ scale: 0.9 }}
     >
       <div className="p-4 space-y-4 transition rounded-lg shadow-lg bg-white/10 group-hover:bg-black/10">
         <div className="w-full overflow-hidden rounded-2xl">
@@ -30,26 +28,17 @@ function ArtCard({
             src={img}
             alt={img}
             className="duration-300 rounded-lg group-hover:scale-110"
-/>
-</div>
+          />
+        </div>
 
         <div className="flex flex-wrap justify-between">
           <div className="space-y-2">
-            <p>
-              @
-              {author}
-            </p>
+            <p>@{author}</p>
             <h4 className="text-xl font-semibold">{name}</h4>
           </div>
           <div className="text-right not-prose">
-            <p className="text-sm font-normal">
-              Current Bid
-            </p>
-            <h4 className="text-xl font-semibold text-white">
-              {price}
-              {' '}
-              ETH
-            </h4>
+            <p className="text-sm font-normal">Current Bid</p>
+            <h4 className="text-xl font-semibold text-white">{price} ETH</h4>
           </div>
         </div>
         <PrimaryButton
@@ -59,7 +48,6 @@ function ArtCard({
               amount: price,
               keyword: img,
               message: `Buy ${name} for ${price} ETH`,
-
             }
             sendTransaction(data)
           }}

@@ -1,8 +1,8 @@
 import { useRef, useState } from 'react'
 
 interface props {
-  title: string | number;
-  body: string | number | JSX.Element;
+  title: string | number
+  body: string | number | JSX.Element
 }
 
 function Accordion({ title, body }: props) {
@@ -13,7 +13,7 @@ function Accordion({ title, body }: props) {
     <button
       type="button"
       onClick={() => setSelected((v) => !v)}
-      className={`border-b cursor-pointer border-white/50 ${selected && 'pb-4'}`}
+      className={`cursor-pointer border-b border-white/50 ${selected && 'pb-4'}`}
     >
       <div className="flex items-center justify-between py-5">
         <p className="">{title}</p>
