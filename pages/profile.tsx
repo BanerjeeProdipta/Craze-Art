@@ -13,8 +13,8 @@ const Profile = () => {
         title="Profile"
         description="Lorem ipsum dolor sit amet, consectetur adipiscing elit."
       />
-      <p>Balance: {currentAccountBalance || ''}</p>
-      <p> Wallet Address:{currentAccount} </p>
+      <p className="text-white font-2xl">Balance: {currentAccountBalance || ''}</p>
+      <p className="text-white font-2xl"> Wallet Address:{currentAccount} </p>
     </div>
   )
 }
