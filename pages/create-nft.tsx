@@ -20,8 +20,32 @@ const createNft = () => {
     },
   })
 
-  const onSubmit = (data: any) => {
+  const onSubmit = async (data: any) => {
     console.log(data)
+    // upload to IPFS
+    const formData = new FormData()
+
+    // upload file to IPFS with pinyata API
+    // todo create pinataApiKey, pinataSecret, pinataApiEndpoint
+    // const config = {
+    //   method: 'POST',
+    //   maxContentLength: Infinity,
+    //   headers: {
+    //     pinata_api_key: pinataApiKey,
+    //     pinata_secret_api_key: pinataSecret,
+    //   },
+    //   body: formData,
+    // }
+
+    // try {
+    //   const response = await fetch(pinataApiEndpoint, config)
+
+    //   const data = await response.json()
+
+    //   return data.IpfsHash as string
+    // } catch (error) {
+    //   console.log(error)
+    // }
   }
 
   return (

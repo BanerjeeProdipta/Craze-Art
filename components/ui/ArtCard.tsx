@@ -20,7 +20,7 @@ function ArtCard({ img, author, price, name }: props) {
       transition={{ duration: 0.1, ease: 'easeInOut' }}
       variants={item}
       className="transition duration-300 group"
-      whileTap={{ scale: 0.9 }}
+      whileTap={{ scale: 0.95 }}
     >
       <div className="p-4 space-y-4 transition rounded-lg shadow-lg bg-white/10 group-hover:bg-black/10">
         <div className="w-full overflow-hidden rounded-2xl">
