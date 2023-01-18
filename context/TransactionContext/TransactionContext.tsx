@@ -26,6 +26,9 @@ const TransactionContext = createContext({
   sendTransaction: (data: NftType) => {
     console.log(data)
   },
+  async getCurrentBalance() {
+    return ''
+  },
 })
 
 const window: any = global
@@ -185,7 +188,7 @@ function TransactionContextProvider({ children }: any) {
       }
       return true
     } catch (error) {
-      console.log(error)
+      console.log('error')
     }
   }
 
@@ -200,6 +203,20 @@ function TransactionContextProvider({ children }: any) {
     } catch (error) {
       console.log(error)
     }
+  }
+
+  const getCurrentBalance = async () => {
+    try {
+      const provider = new ethers.providers.Web3Provider(ethereum)
+      const balance = await provider.getBalance(currentAccount)
+
+      const etherBalance = ethers.utils.formatEther(balance)
+
+      return etherBalance
+    } catch (error) {
+      console.log(error)
+    }
+    return ''
   }
 
   useEffect(() => {
@@ -217,6 +234,7 @@ function TransactionContextProvider({ children }: any) {
         currentAccount,
         isLoading,
         sendTransaction,
+        getCurrentBalance,
       }}
     >
       {children}
