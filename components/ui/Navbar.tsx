@@ -1,11 +1,13 @@
 import Link from 'next/link'
-import { useContext, useRef, useState } from 'react'
+import { useContext, useEffect, useRef, useState } from 'react'
 import { AiOutlineClose, AiOutlineMenu, AiOutlineSearch, AiOutlineSend } from 'react-icons/ai'
 import { TransactionContext } from '../../context/TransactionContext'
+import { useRouter } from 'next/router'
 
 function Navbar() {
   const ref = useRef<HTMLDivElement>(null)
   const [isOpen, setIsOpen] = useState(false)
+  const [showMenu, setShowMenu] = useState(false)
 
   const navItems = [
     {
@@ -22,22 +24,75 @@ function Navbar() {
     },
   ]
 
+  // close menu on clicking anywhere on screen
+  useEffect(() => {
+    const handleScreenClick = (e: any) => {
+      if (ref.current && !ref.current.contains(e.target)) {
+        setIsOpen(false)
+      }
+    }
+    document.addEventListener('click', handleScreenClick)
+    return () => {
+      document.removeEventListener('click', handleScreenClick)
+    }
+  }, [setIsOpen])
+
+  const handleScreenClick = () => setShowMenu(false)
+
   const handleLinkOnClick = () => setIsOpen(false)
 
   const { connectWallet, currentAccount, disconnectWallet } = useContext(TransactionContext)
 
   console.log(currentAccount)
-
+  const router = useRouter()
   const connectWalletButton = () => (
     <div>
       {currentAccount ? (
-        <button
-          type="button"
-          className="p-1 text-white transition duration-500 ease-in-out border border-transparent border-white rounded cursor-pointer"
-          onClick={disconnectWallet}
-        >
-          {`${currentAccount.slice(0, 2)}...${currentAccount.slice(-4)}`}
-        </button>
+        <>
+          <button
+            type="button"
+            className="p-1 text-white transition duration-500 ease-in-out border border-transparent border-white rounded cursor-pointer"
+            onClick={() => setShowMenu(!showMenu)}
+          >
+            {`${currentAccount.slice(0, 2)}...${currentAccount.slice(-4)}`}
+          </button>
+          {/* show menu  */}
+
+          <div
+            className={`absolute right-0 mt-2 w-64 rounded-md bg-gray-900 shadow-lg ${
+              showMenu ? 'block' : 'hidden'
+            }`}
+          >
+            <Link
+              onClick={() => {
+                handleLinkOnClick()
+              }}
+              href={'/profile'}
+              className="block p-2 font-semibold transition-all duration-300 rounded-md hover:bg-primaryLight hover:text-white hover:opacity-75"
+            >
+              Profile
+            </Link>
+            <Link
+              onClick={() => {
+                handleLinkOnClick()
+              }}
+              href={'/create-nft'}
+              className="block p-2 font-semibold transition-all duration-300 rounded-md hover:bg-primaryLight hover:text-white hover:opacity-75"
+            >
+              Create NFT
+            </Link>
+            <Link
+              onClick={() => {
+                disconnectWallet()
+                handleLinkOnClick()
+              }}
+              href={'/'}
+              className="block p-2 font-semibold transition-all duration-300 rounded-md hover:bg-primaryLight hover:text-white hover:opacity-75"
+            >
+              Disconnect Wallet
+            </Link>
+          </div>
+        </>
       ) : (
         <button
           type="button"
@@ -54,7 +109,7 @@ function Navbar() {
     <nav className="sticky top-0 z-50 w-full px-2 py-3 backdrop-blur-sm">
       <div
         ref={ref}
-        className="relative overflow-hidden transition-all delay-150 duration-500 ease-in-out md:min-h-[80px]"
+        className="relative overflow-hidden transition-all delay-150 duration-500 ease-in-out md:static md:min-h-[80px]"
         style={{ maxHeight: isOpen && ref.current ? 800 : 50 }}
       >
         <div className="flex items-center justify-between">
@@ -140,7 +195,27 @@ function Navbar() {
               </Link>
             ))}
 
-            {connectWalletButton()}
+            {currentAccount && (
+              <>
+                <Link
+                  onClick={handleLinkOnClick}
+                  href={'/profile'}
+                  className="block p-2 font-semibold transition-all duration-300 rounded-md hover:bg-primaryLight hover:text-white hover:opacity-75"
+                >
+                  Profile
+                </Link>
+                <Link
+                  onClick={() => {
+                    disconnectWallet()
+                    handleLinkOnClick()
+                  }}
+                  href={'/'}
+                  className="block p-2 font-semibold transition-all duration-300 rounded-md hover:bg-primaryLight hover:text-white hover:opacity-75"
+                >
+                  Disconnect Wallet
+                </Link>
+              </>
+            )}
           </div>
         )}
         {/* small screen links ENDS */}
