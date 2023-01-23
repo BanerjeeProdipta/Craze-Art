@@ -16,30 +16,19 @@ type NftType = {
   keyword: string
 }
 
-type TransactionContextType = {
-  currentAccount: string
-  currentAccountBalance: string
-  isLoading: boolean
-  transactionCount: number
-  transactions: any[]
-  connectWallet: () => Promise<void>
-  disconnectWallet: () => Promise<void>
-  sendTransaction: (data: NftType) => Promise<void>
-  getAllTransactions: () => Promise<void>
-  getBalance: () => Promise<void>
-}
-
-const TransactionContext = createContext<TransactionContextType>({
-  currentAccount: '',
-  currentAccountBalance: '',
-  isLoading: false,
+const TransactionContext = createContext({
   transactionCount: 0,
+  connectWallet: () => {},
+  disconnectWallet: () => {},
   transactions: [],
-  connectWallet: async () => {},
-  disconnectWallet: async () => {},
-  sendTransaction: async () => {},
-  getAllTransactions: async () => {},
-  getBalance: async () => {},
+  currentAccount: '',
+  isLoading: false,
+  sendTransaction: (data: NftType) => {
+    console.log(data)
+  },
+  async getCurrentBalance() {
+    return ''
+  },
 })
 
 const window: any = global
@@ -55,7 +44,6 @@ const createEthereumContract = () => {
 
 function TransactionContextProvider({ children }: any) {
   const [currentAccount, setCurrentAccount] = useState('')
-  const [currentAccountBalance, setCurrentAccountBalance] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [transactionCount, setTransactionCount] = useState(0)
   const [transactions, setTransactions] = useState([])
@@ -193,7 +181,6 @@ function TransactionContextProvider({ children }: any) {
 
       if (accounts.length) {
         setCurrentAccount(accounts[0])
-        await getBalance()
 
         getAllTransactions()
       } else {
@@ -201,7 +188,7 @@ function TransactionContextProvider({ children }: any) {
       }
       return true
     } catch (error) {
-      console.log(error)
+      console.log('error')
     }
   }
 
@@ -218,41 +205,36 @@ function TransactionContextProvider({ children }: any) {
     }
   }
 
-  const getBalance = async () => {
+  const getCurrentBalance = async () => {
     try {
-      if (ethereum && currentAccount) {
-        const provider = new ethers.providers.Web3Provider(ethereum)
-        const balance = await provider.getBalance(currentAccount)
-        const etherBalance = ethers.utils.formatEther(balance)
+      const provider = new ethers.providers.Web3Provider(ethereum)
+      const balance = await provider.getBalance(currentAccount)
 
-        console.log('etherBalance', etherBalance)
+      const etherBalance = ethers.utils.formatEther(balance)
 
-        setCurrentAccountBalance(etherBalance)
-      }
+      return etherBalance
     } catch (error) {
       console.log(error)
     }
+    return ''
   }
 
   useEffect(() => {
     isWalletIsConnected()
-    getBalance()
     checkIfTransactionsExists()
   }, [transactionCount])
 
   return (
     <TransactionContext.Provider
       value={{
-        currentAccount,
-        currentAccountBalance,
+        transactionCount,
         connectWallet,
         disconnectWallet,
-        sendTransaction,
-        getAllTransactions,
-        getBalance,
-        isLoading,
         transactions,
-        transactionCount,
+        currentAccount,
+        isLoading,
+        sendTransaction,
+        getCurrentBalance,
       }}
     >
       {children}
