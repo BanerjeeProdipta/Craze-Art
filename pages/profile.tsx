@@ -1,20 +1,33 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { TransactionContext } from '../context/TransactionContext'
 import SectionHeader from '../components/ui/SectionHeader'
 
 const Profile = () => {
-  const { currentAccountBalance, currentAccount } = useContext(TransactionContext)
+  const { getCurrentBalance, currentAccount } = useContext(TransactionContext)
+  const [balance, setBalance] = useState('')
 
-  console.log(currentAccountBalance)
+  useEffect(() => {
+    const getBalance = async () => {
+      const res = await getCurrentBalance()
+      console.log(res)
+
+      setBalance(res)
+    }
+    getBalance()
+  }, [currentAccount])
 
   return (
-    <div>
+    <div className="space-y-6">
       <SectionHeader
         title="Profile"
         description="Lorem ipsum dolor sit amet, consectetur adipiscing elit."
       />
-      <p>Balance: {currentAccountBalance || ''}</p>
-      <p> Wallet Address:{currentAccount} </p>
+      <p className="text-white font-2xl">Balance: {balance || ''}</p>
+      <p className="text-white font-2xl"> Wallet Address: {currentAccount} </p>
+      <SectionHeader
+        title="My NFTs"
+        description="Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+      />
     </div>
   )
 }
