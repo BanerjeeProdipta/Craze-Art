@@ -1,0 +1,22 @@
+{
+  "extends": ["prettier", "plugin:storybook/recommended", "next/core-web-vitals"],
+  "plugins": ["prettier"],
+  "rules": {
+    "prettier/prettier": "error",
+    "no-unused-vars": "warn",
+    "react/jsx-key": "error",
+    "react/jsx-filename-extension": [
+      2,
+      {
+        "extensions": [".tsx", ".ts"]
+      }
+    ],
+    "no-plusplus": [
+      "error",
+      {
+        "allowForLoopAfterthoughts": true
+      }
+    ],
+    "camelcase": "warn"
+  }
+}
