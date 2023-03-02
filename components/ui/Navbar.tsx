@@ -2,7 +2,6 @@ import Link from 'next/link'
 import { useContext, useEffect, useRef, useState } from 'react'
 import { AiOutlineClose, AiOutlineMenu, AiOutlineSearch, AiOutlineSend } from 'react-icons/ai'
 import { TransactionContext } from '../../context/TransactionContext'
-import { useRouter } from 'next/router'
 
 function Navbar() {
   const ref = useRef<HTMLDivElement>(null)
@@ -37,19 +36,15 @@ function Navbar() {
     }
   }, [setIsOpen])
 
-  const handleScreenClick = () => setShowMenu(false)
-
   const handleLinkOnClick = () => setIsOpen(false)
 
   const { connectWallet, currentAccount, disconnectWallet } = useContext(TransactionContext)
 
-  console.log(currentAccount)
-  const router = useRouter()
   const connectWalletButton = () => (
     <div>
       {currentAccount ? (
         <>
-          <button
+          {/* <button
             type="button"
             className="p-1 text-white transition duration-500 ease-in-out border border-transparent border-white rounded cursor-pointer"
             onClick={() => setShowMenu(!showMenu)}
@@ -58,7 +53,7 @@ function Navbar() {
           </button>
           {/* show menu  */}
 
-          <div
+          {/* <div
             className={`absolute right-0 mt-2 w-64 rounded-md bg-gray-900 shadow-lg ${
               showMenu ? 'block' : 'hidden'
             }`}
@@ -91,6 +86,23 @@ function Navbar() {
             >
               Disconnect Wallet
             </Link>
+          </div> */}
+
+          <div className="dropdown dropdown-end">
+            <label tabIndex={0} className="m-1 btn">
+              Click
+            </label>
+            <ul
+              tabIndex={0}
+              className="p-2 shadow dropdown-content menu bg-base-100 rounded-box w-52"
+            >
+              <li>
+                <a>Item 1</a>
+              </li>
+              <li>
+                <a>Item 2</a>
+              </li>
+            </ul>
           </div>
         </>
       ) : (
